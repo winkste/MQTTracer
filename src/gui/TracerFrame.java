@@ -6,6 +6,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -38,6 +41,9 @@ public class TracerFrame extends javax.swing.JFrame {
      */
     public TracerFrame() {
         initComponents();
+        scroller_jsp.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
+            e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+        });
     }
 
     /**
@@ -49,7 +55,7 @@ public class TracerFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scroller_jsp = new javax.swing.JScrollPane();
         textDisplay_jtp = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
         filter_jb = new javax.swing.JButton();
@@ -60,9 +66,9 @@ public class TracerFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textDisplay_jtp.setBackground(new java.awt.Color(0, 0, 0));
-        jScrollPane1.setViewportView(textDisplay_jtp);
+        scroller_jsp.setViewportView(textDisplay_jtp);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(scroller_jsp, java.awt.BorderLayout.CENTER);
 
         filter_jb.setText("filter");
         filter_jb.addActionListener(new java.awt.event.ActionListener() {
@@ -134,8 +140,9 @@ public class TracerFrame extends javax.swing.JFrame {
                 client.setIdentifier("macBook_pro");
                 client.connectClient();
                 
-        client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/trace/#"));
-        client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("out/trace/#"));
+        client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/s/trace/#"));
+        client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/s/trace/#"));
+        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));
         }
         else
         {
@@ -227,8 +234,8 @@ public class TracerFrame extends javax.swing.JFrame {
     public javax.swing.JToggleButton connect_jtb;
     public javax.swing.JButton filter_jb;
     public javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JToggleButton log_jtb;
+    public javax.swing.JScrollPane scroller_jsp;
     public javax.swing.JButton select_jb;
     public javax.swing.JTextPane textDisplay_jtp;
     // End of variables declaration//GEN-END:variables
@@ -250,6 +257,7 @@ public class TracerFrame extends javax.swing.JFrame {
         {
             Document doc = textDisplay_jtp.getDocument();
             doc.insertString(doc.getLength(), entryString, as);
+            //textDisplay_jtp.setCaretPosition(textDisplay_jtp.getCaretPosition()+textDisplay_jtp.getText().length());
         } catch(BadLocationException e) 
         {
             e.printStackTrace();
@@ -293,15 +301,36 @@ public class TracerFrame extends javax.swing.JFrame {
             @Override
             public void notify(String filter, String msg) 
             {
-                SetMessage(filter, msg, Color.green);
-                
-                
+                SetMessage(filter, msg, Color.green);             
             }
 
             @Override
             public void notify(String msg) 
             {
                 SetMessage("unknown filter", msg, Color.green);
+            }
+        });
+    }
+    
+    public MqttSubscriber getMqttStdSubscriberTrace(String filter) 
+    {
+        return(new MqttSubscriber(){
+            @Override
+            public String getFilter() 
+            {
+                return(filter);
+            }
+
+            @Override
+            public void notify(String filter, String msg) 
+            {
+                SetMessage(filter, msg, Color.white);             
+            }
+
+            @Override
+            public void notify(String msg) 
+            {
+                SetMessage("unknown filter", msg, Color.white);
             }
         });
     }
