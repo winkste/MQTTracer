@@ -110,7 +110,7 @@ public class MyMqttClient implements MqttCallback
     @Override
     public void messageArrived(String filter, MqttMessage mm) throws Exception 
     {
-        System.out.println("Filter: " + filter + "   Msg: " + new String(mm.getPayload()));
+        //System.out.println("Filter: " + filter + "   Msg: " + new String(mm.getPayload()));
         for(int idx = 0; idx < subsList.size(); idx++)
         {
             if(subsList.get(idx).getFilter().equals(filter))
@@ -124,7 +124,7 @@ public class MyMqttClient implements MqttCallback
                 if(filter.startsWith(subTopic))
                 {
                     subsList.get(idx).notify(new String(filter), new String(mm.getPayload()));
-                    System.out.println("topic found with #");
+                    //System.out.println("topic found with #");
                 }
                 
             }
@@ -160,7 +160,7 @@ public class MyMqttClient implements MqttCallback
     {
         try {
             MqttMessage message = new MqttMessage(msg.getBytes());
-            client.publish("javaprog/button", message);
+            client.publish(filter, message);
         } catch (MqttException ex) {
             Logger.getLogger(MyMqttClient.class.getName()).log(Level.SEVERE, null, ex);
         }

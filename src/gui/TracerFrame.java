@@ -42,7 +42,8 @@ public class TracerFrame extends javax.swing.JFrame {
     public TracerFrame() {
         initComponents();
         scroller_jsp.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
-            e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+            if(autoscroll_jcb.isSelected())
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
         });
     }
 
@@ -62,6 +63,13 @@ public class TracerFrame extends javax.swing.JFrame {
         select_jb = new javax.swing.JButton();
         log_jtb = new javax.swing.JToggleButton();
         connect_jtb = new javax.swing.JToggleButton();
+        autoscroll_jcb = new javax.swing.JCheckBox();
+        jPanel2 = new javax.swing.JPanel();
+        publish_jb = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        topic_jtf = new javax.swing.JTextField();
+        payload_jtf = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,6 +107,8 @@ public class TracerFrame extends javax.swing.JFrame {
             }
         });
 
+        autoscroll_jcb.setText("autoscroll");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -109,7 +119,10 @@ public class TracerFrame extends javax.swing.JFrame {
                     .addComponent(filter_jb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(select_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(log_jtb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(connect_jtb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                    .addComponent(connect_jtb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(autoscroll_jcb)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -123,10 +136,59 @@ public class TracerFrame extends javax.swing.JFrame {
                 .addComponent(select_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(log_jtb)
-                .addContainerGap(230, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                .addComponent(autoscroll_jcb)
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
+
+        publish_jb.setText("publish...");
+        publish_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                publish_jbActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("payload:");
+
+        topic_jtf.setText("enter topic...");
+
+        payload_jtf.setText("enter optional payload...");
+
+        jLabel2.setText("topic:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(142, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(topic_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(payload_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(publish_jb)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(publish_jb)
+                    .addComponent(jLabel1)
+                    .addComponent(topic_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(payload_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -195,6 +257,13 @@ public class TracerFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_log_jtbActionPerformed
 
+    private void publish_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publish_jbActionPerformed
+        if(true == clientConnected_bol)
+        {
+            client.publish(topic_jtf.getText(), payload_jtf.getText());
+        }
+    }//GEN-LAST:event_publish_jbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -231,13 +300,20 @@ public class TracerFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JCheckBox autoscroll_jcb;
     public javax.swing.JToggleButton connect_jtb;
     public javax.swing.JButton filter_jb;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     public javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     public javax.swing.JToggleButton log_jtb;
+    private javax.swing.JTextField payload_jtf;
+    private javax.swing.JButton publish_jb;
     public javax.swing.JScrollPane scroller_jsp;
     public javax.swing.JButton select_jb;
     public javax.swing.JTextPane textDisplay_jtp;
+    private javax.swing.JTextField topic_jtf;
     // End of variables declaration//GEN-END:variables
 
     private void SetMessage(String filter, String msg, Color msgColor)
