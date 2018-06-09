@@ -2,10 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/stephan_wink/Documents/workspace_github/MQTTracer/src/gui/TracerFrame.java</file>
-            <file>file:/Users/stephan_wink/Documents/workspace_github/MQTTracer/src/myMqtt/MyMqttClient.java</file>
-            <file>file:/Users/stephan_wink/Documents/workspace_github/MQTTracer/src/launch/Launcher.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

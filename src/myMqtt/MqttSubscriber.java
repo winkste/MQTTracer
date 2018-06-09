@@ -17,4 +17,6 @@ public interface MqttSubscriber {
 
     public void notify(String filter, String string);
     
+    public void disconnected();
+    
 }

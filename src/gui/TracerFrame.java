@@ -7,19 +7,22 @@ package gui;
 
 import java.awt.Color;
 import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -35,6 +38,7 @@ public class TracerFrame extends javax.swing.JFrame {
     private boolean clientConnected_bol = false;
     MyMqttClient client;
     PrintWriter printer = null;
+    private FilterDialog filterDialog;
 
     /**
      * Creates new form TracerFrame
@@ -45,6 +49,15 @@ public class TracerFrame extends javax.swing.JFrame {
             if(autoscroll_jcb.isSelected())
                 e.getAdjustable().setValue(e.getAdjustable().getMaximum());
         });
+        
+        filterDialog = new FilterDialog(new javax.swing.JFrame(), true);
+                filterDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        filterDialog.setVisible(false);
+                    }
+                });
+                filterDialog.setVisible(false);
     }
 
     /**
@@ -64,6 +77,7 @@ public class TracerFrame extends javax.swing.JFrame {
         log_jtb = new javax.swing.JToggleButton();
         connect_jtb = new javax.swing.JToggleButton();
         autoscroll_jcb = new javax.swing.JCheckBox();
+        clear_jb = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         publish_jb = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -73,7 +87,7 @@ public class TracerFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        textDisplay_jtp.setBackground(new java.awt.Color(0, 0, 0));
+        textDisplay_jtp.setBackground(new java.awt.Color(102, 102, 102));
         scroller_jsp.setViewportView(textDisplay_jtp);
 
         getContentPane().add(scroller_jsp, java.awt.BorderLayout.CENTER);
@@ -109,6 +123,13 @@ public class TracerFrame extends javax.swing.JFrame {
 
         autoscroll_jcb.setText("autoscroll");
 
+        clear_jb.setText("clear");
+        clear_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clear_jbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -122,7 +143,8 @@ public class TracerFrame extends javax.swing.JFrame {
                     .addComponent(connect_jtb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(autoscroll_jcb)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(clear_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -136,7 +158,9 @@ public class TracerFrame extends javax.swing.JFrame {
                 .addComponent(select_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(log_jtb)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addComponent(clear_jb)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(autoscroll_jcb)
                 .addContainerGap())
         );
@@ -196,26 +220,17 @@ public class TracerFrame extends javax.swing.JFrame {
     private void connect_jtbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_jtbActionPerformed
         if(false == clientConnected_bol)
         {
-            clientConnected_bol = true;
-            client = MyMqttClient.getInstance();
-                client.setAddress("tcp://192.168.178.45:1883");
-                client.setIdentifier("macBook_pro");
-                client.connectClient();
-                
-        client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/s/trace/#"));
-        client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/s/trace/#"));
-        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));
+            connectClient();
         }
         else
         {
             clientConnected_bol = false;
             client.disconnect();
-        }
-        
+        }       
     }//GEN-LAST:event_connect_jtbActionPerformed
 
     private void filter_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filter_jbActionPerformed
-        // TODO add your handling code here:
+        filterDialog.setVisible(true);
     }//GEN-LAST:event_filter_jbActionPerformed
 
     private void select_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_select_jbActionPerformed
@@ -264,6 +279,10 @@ public class TracerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_publish_jbActionPerformed
 
+    private void clear_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_jbActionPerformed
+        textDisplay_jtp.setText("");
+    }//GEN-LAST:event_clear_jbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -301,6 +320,7 @@ public class TracerFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JCheckBox autoscroll_jcb;
+    public javax.swing.JButton clear_jb;
     public javax.swing.JToggleButton connect_jtb;
     public javax.swing.JButton filter_jb;
     private javax.swing.JLabel jLabel1;
@@ -321,22 +341,26 @@ public class TracerFrame extends javax.swing.JFrame {
         Date d = new Date();
         SimpleDateFormat sdfmt = new SimpleDateFormat();
         String entryString;
-        
-        sdfmt.applyPattern( "dd.MM.yyyy hh:mm:ss:SSS" );
-                   
-        StyleContext sc = StyleContext.getDefaultStyleContext();
-        AttributeSet as = sc.addAttribute(sc.getEmptySet(), 
-                StyleConstants.Foreground, msgColor);
+       
+        sdfmt.applyPattern( "dd.MM.yyyy hh:mm:ss:SSS" );                   
         entryString = sdfmt.format(d) +"\t"+ filter + "\t" + msg + "\n";
+        
         Logging(entryString);
-        try 
+        
+        if(true == filterDialog.CheckFilter(filter))
         {
-            Document doc = textDisplay_jtp.getDocument();
-            doc.insertString(doc.getLength(), entryString, as);
-            //textDisplay_jtp.setCaretPosition(textDisplay_jtp.getCaretPosition()+textDisplay_jtp.getText().length());
-        } catch(BadLocationException e) 
-        {
-            e.printStackTrace();
+            try 
+            {
+                Document doc = textDisplay_jtp.getDocument();
+                StyleContext sc = StyleContext.getDefaultStyleContext();
+                AttributeSet as = sc.addAttribute(sc.getEmptySet(), 
+                StyleConstants.Foreground, msgColor);
+                doc.insertString(doc.getLength(), entryString, as);
+                //textDisplay_jtp.setCaretPosition(textDisplay_jtp.getCaretPosition()+textDisplay_jtp.getText().length());
+            } catch(BadLocationException e) 
+            {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -362,6 +386,12 @@ public class TracerFrame extends javax.swing.JFrame {
             {
                 SetMessage("unknown filter", msg, Color.red);
             }
+
+            @Override
+            public void disconnected() 
+            {
+                handleDisconnection();
+            }
         });
     }
     
@@ -385,7 +415,41 @@ public class TracerFrame extends javax.swing.JFrame {
             {
                 SetMessage("unknown filter", msg, Color.green);
             }
+
+            @Override
+            public void disconnected() 
+            {
+                handleDisconnection();  
+            }
         });
+    }
+    
+    private void handleDisconnection()
+    {
+        if(false == clientConnected_bol)
+        {
+            clientConnected_bol = false;
+            client = null;
+            connect_jtb.setSelected(false);
+            JOptionPane.showMessageDialog(this,
+                "Eggs are not supposed to be green.",
+                "Inane warning",
+                JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    private void connectClient()
+    {
+        client = MyMqttClient.getInstance();
+        client.setAddress("tcp://192.168.178.45:1883");
+        client.setIdentifier("macBook_pro");
+        client.connectClient();
+
+        clientConnected_bol = true;
+
+        client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/#"));
+        client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/#"));
+        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));
     }
     
     public MqttSubscriber getMqttStdSubscriberTrace(String filter) 
@@ -407,6 +471,12 @@ public class TracerFrame extends javax.swing.JFrame {
             public void notify(String msg) 
             {
                 SetMessage("unknown filter", msg, Color.white);
+            }
+
+            @Override
+            public void disconnected() 
+            {
+                handleDisconnection();
             }
         });
     }

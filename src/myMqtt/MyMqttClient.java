@@ -22,7 +22,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MyMqttClient implements MqttCallback 
 {
     private MqttClient client = null;
-    private List<MqttSubscriber> subsList = new ArrayList<MqttSubscriber>();
+    private List<MqttSubscriber> subsList = new ArrayList<>();
     private String address;
     private String identifier;
     
@@ -103,8 +103,14 @@ public class MyMqttClient implements MqttCallback
     }
 
     @Override
-    public void connectionLost(Throwable thrwbl) {
-         System.out.println("TODO: handle connection lost exception");
+    public void connectionLost(Throwable thrwbl) 
+    {
+        System.out.println("MyMqttClient: connection lost detected");
+        for(int idx = 0; idx < subsList.size(); idx++)
+        {
+            // notify all subscriber that connection was lost
+            subsList.get(idx).disconnected();
+        }
     }
 
     @Override
