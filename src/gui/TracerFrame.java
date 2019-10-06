@@ -78,6 +78,7 @@ public class TracerFrame extends javax.swing.JFrame {
         connect_jtb = new javax.swing.JToggleButton();
         autoscroll_jcb = new javax.swing.JCheckBox();
         clear_jb = new javax.swing.JButton();
+        runXmlFrame_jb = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         publish_jb = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -130,6 +131,13 @@ public class TracerFrame extends javax.swing.JFrame {
             }
         });
 
+        runXmlFrame_jb.setText("XmlFrame");
+        runXmlFrame_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runXmlFrame_jbActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -141,10 +149,11 @@ public class TracerFrame extends javax.swing.JFrame {
                     .addComponent(select_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(log_jtb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(connect_jtb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                    .addComponent(clear_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(autoscroll_jcb)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(clear_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(runXmlFrame_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -158,7 +167,9 @@ public class TracerFrame extends javax.swing.JFrame {
                 .addComponent(select_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(log_jtb)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(runXmlFrame_jb)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addComponent(clear_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(autoscroll_jcb)
@@ -283,6 +294,12 @@ public class TracerFrame extends javax.swing.JFrame {
         textDisplay_jtp.setText("");
     }//GEN-LAST:event_clear_jbActionPerformed
 
+    private void runXmlFrame_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runXmlFrame_jbActionPerformed
+        XMLFrame frame = new XMLFrame();
+        
+        frame.Start();
+    }//GEN-LAST:event_runXmlFrame_jbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -330,6 +347,7 @@ public class TracerFrame extends javax.swing.JFrame {
     public javax.swing.JToggleButton log_jtb;
     private javax.swing.JTextField payload_jtf;
     private javax.swing.JButton publish_jb;
+    private javax.swing.JButton runXmlFrame_jb;
     public javax.swing.JScrollPane scroller_jsp;
     public javax.swing.JButton select_jb;
     public javax.swing.JTextPane textDisplay_jtp;
