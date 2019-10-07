@@ -39,9 +39,16 @@ public class Topic
     
     public String GetPayloadAt(int idx)
     {
-        if(idx < this.payloads.length)
+        if(null != payloads)
         {
-            return(this.payloads[idx]);
+            if(idx < this.payloads.length)
+            {
+                return(this.payloads[idx]);
+            }
+            else
+            {
+                return(null);
+            }
         }
         else
         {

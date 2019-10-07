@@ -7,16 +7,12 @@ package gui;
 
 import java.awt.Color;
 import java.awt.event.AdjustmentEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -35,15 +31,17 @@ import myMqtt.MyMqttClient;
  */
 public class TracerFrame extends javax.swing.JFrame {
     
-    private boolean clientConnected_bol = false;
     MyMqttClient client;
     PrintWriter printer = null;
     private FilterDialog filterDialog;
+    private XMLFrame xmlFrame;
 
     /**
      * Creates new form TracerFrame
      */
-    public TracerFrame() {
+    public TracerFrame() 
+    {
+        client = MyMqttClient.getInstance();
         initComponents();
         scroller_jsp.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
             if(autoscroll_jcb.isSelected())
@@ -229,15 +227,16 @@ public class TracerFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void connect_jtbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_jtbActionPerformed
-        if(false == clientConnected_bol)
+        if(connect_jtb.isSelected())
         {
-            connectClient();
+            if(!client.isConnected())
+                connectClient(); 
         }
         else
         {
-            clientConnected_bol = false;
-            client.disconnect();
-        }       
+            if(client.isConnected())
+                client.disconnect();
+        }
     }//GEN-LAST:event_connect_jtbActionPerformed
 
     private void filter_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filter_jbActionPerformed
@@ -284,7 +283,7 @@ public class TracerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_log_jtbActionPerformed
 
     private void publish_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publish_jbActionPerformed
-        if(true == clientConnected_bol)
+        if(true == client.isConnected())
         {
             client.publish(topic_jtf.getText(), payload_jtf.getText());
         }
@@ -295,9 +294,9 @@ public class TracerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_clear_jbActionPerformed
 
     private void runXmlFrame_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runXmlFrame_jbActionPerformed
-        XMLFrame frame = new XMLFrame();
+        this.xmlFrame = new XMLFrame();
         
-        frame.Start();
+        this.xmlFrame.Start();
     }//GEN-LAST:event_runXmlFrame_jbActionPerformed
 
     /**
@@ -444,26 +443,19 @@ public class TracerFrame extends javax.swing.JFrame {
     
     private void handleDisconnection()
     {
-        if(false == clientConnected_bol)
-        {
-            clientConnected_bol = false;
-            client = null;
-            connect_jtb.setSelected(false);
-            JOptionPane.showMessageDialog(this,
-                "Eggs are not supposed to be green.",
-                "Inane warning",
-                JOptionPane.WARNING_MESSAGE);
-        }
+        connect_jtb.setSelected(false);
+        JOptionPane.showMessageDialog(this,
+            "Eggs are not supposed to be green.",
+            "Inane warning",
+            JOptionPane.WARNING_MESSAGE);
+        this.runXmlFrame_jb.setEnabled(false);
     }
     
     private void connectClient()
     {
-        client = MyMqttClient.getInstance();
         client.setAddress("tcp://192.168.178.45:1883");
-        client.setIdentifier("macBook_pro");
+        client.setIdentifier("imac");
         client.connectClient();
-
-        clientConnected_bol = true;
 
         client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/#"));
         client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/#"));

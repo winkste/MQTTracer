@@ -21,6 +21,8 @@ public class XmlFrameControl
     private XMLFrame frame;
     private MyXml myXml;
     private int selectedDevice;
+    private boolean connected;
+    private boolean fileLoaded;
 
     XmlFrameControl(XMLFrame frame) 
     {
@@ -28,6 +30,8 @@ public class XmlFrameControl
         this.frame = frame;
         myXml = null;
         selectedDevice = 999;
+        connected = false;
+        fileLoaded = false;
     }
 
     void StartFileSelection(ActionEvent evt) 
@@ -39,21 +43,26 @@ public class XmlFrameControl
         
         if(JFileChooser.APPROVE_OPTION == dialogResult_i)
         {
-            xmlFile = chooser_jfc.getSelectedFile();
-            frame.SetXmlFileName(xmlFile.getPath());
-            myXml = new MyXml(xmlFile);
-            myXml.Create();
-            frame.SetDeviceList(myXml.GetDeviceList());
-            frame.EnableControls();
+            this.xmlFile = chooser_jfc.getSelectedFile();
+            this.frame.SetXmlFileName(xmlFile.getPath());
+            this.myXml = new MyXml(xmlFile);
+            this.fileLoaded = myXml.Create();
+            this.frame.SetDeviceList(myXml.GetDeviceList());
+            this.selectedDevice = 999;
         }
         else
         {   
-            frame.DisableControls();
+            this.fileLoaded = false;
         }
+        UpdateControlsStatus();
     }
 
     void ReactOnDeviceSelectionChanged(int selectedIndex) 
     {
+        if(0 > selectedIndex)
+        {
+            selectedIndex = 0;
+        }
         if(selectedIndex != this.selectedDevice)
         {
             this.selectedDevice = selectedIndex;
@@ -73,5 +82,22 @@ public class XmlFrameControl
             payload = payload.concat(", " + payloads.remove(0));
         }
         this.frame.SetPayload(payload);
-    }    
+    }
+
+    void UpdateControlsStatus()
+    {
+        if(true == fileLoaded)
+        {
+            this.frame.setEnabledOfflineElements(true);
+            if(true == connected)
+            {
+                this.frame.setEnabledOnlineElements(true);
+            }
+        }
+        else
+        {
+            this.frame.setEnabledOfflineElements(false);
+            this.frame.setEnabledOnlineElements(false);
+        }
+    }
 }

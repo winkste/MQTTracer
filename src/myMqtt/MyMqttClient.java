@@ -52,6 +52,17 @@ public class MyMqttClient implements MqttCallback
         this.identifier = identifier;
     }
     
+    public boolean isConnected(){
+        if(null != client)
+        {
+            return(client.isConnected());
+        }
+        else
+        {
+            return(false);
+        }
+    }
+    
     public void connectClient()
     {        
         if(null == client)

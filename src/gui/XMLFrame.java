@@ -12,7 +12,8 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author stephan_wink
  */
-public class XMLFrame extends javax.swing.JFrame {
+public class XMLFrame extends javax.swing.JFrame 
+{
 
     /**
      * Creates new form XMLFrame
@@ -293,9 +294,8 @@ public class XMLFrame extends javax.swing.JFrame {
 
     void SetDeviceList(String[] list) 
     {
-        this.devices_jli.setListData(list);
+        this.devices_jli.setListData(list);   
         this.devices_jli.setSelectedIndex(0);
-        
     }
 
     void SetSubscriptions(AbstractTableModel model) 
@@ -351,19 +351,15 @@ public class XMLFrame extends javax.swing.JFrame {
         });
     }
 
-    void EnableControls() 
+    void setEnabledOfflineElements(boolean b) 
     {
-        this.devices_jli.setEnabled(true);
-        this.publications_jcb.setEnabled(true);
-        this.publishButton_jb.setEnabled(true);
-        this.payload_jtf.setEnabled(true);
+        this.devices_jli.setEnabled(b);
+        this.publications_jcb.setEnabled(b);
+        this.payload_jtf.setEnabled(b);   
     }
 
-    void DisableControls() 
+    void setEnabledOnlineElements(boolean b) 
     {
-        this.devices_jli.setEnabled(false);
-        this.publications_jcb.setEnabled(false);
-        this.publishButton_jb.setEnabled(false);
-        this.payload_jtf.setEnabled(false);
+        this.publishButton_jb.setEnabled(b);
     }
 }
