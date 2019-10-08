@@ -113,6 +113,11 @@ public class MyMqttClient implements MqttCallback
         }
     }
 
+    public void removeSubscriber(MqttSubscriber subs)
+    {
+        subsList.remove(subs);
+    }
+
     @Override
     public void connectionLost(Throwable thrwbl) 
     {
