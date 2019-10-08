@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
@@ -70,7 +71,10 @@ public class MyMqttClient implements MqttCallback
             try{
                 client = new MqttClient(address, identifier);
                 client.setCallback(this);
-                client.connect();
+                MqttConnectOptions opts = new MqttConnectOptions();
+                opts.setCleanSession(true);
+                //client.connect(opts);
+                client.connectWithResult(opts);
             } catch (MqttException ex) {
                 Logger.getLogger(MyMqttClient.class.getName()).log(Level.SEVERE, null, ex);
             }

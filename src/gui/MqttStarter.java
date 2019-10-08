@@ -5,16 +5,21 @@
  */
 package gui;
 
+import myMqtt.MyMqttClient;
+
 /**
  *
  * @author stephan_wink
  */
 public class MqttStarter extends javax.swing.JFrame {
+    
+    private MyMqttClient client;
 
     /**
      * Creates new form MqttStarter
      */
     public MqttStarter() {
+        client = MyMqttClient.getInstance();
         initComponents();
     }
 
@@ -27,22 +32,17 @@ public class MqttStarter extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
+        connect_jtb = new javax.swing.JToggleButton();
+        jPanel1 = new javax.swing.JPanel();
+        startTracer_jb = new javax.swing.JButton();
+        startXml_jb = new javax.swing.JButton();
+        startSequencer_jb = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setText("jButton1");
-
-        jButton2.setText("jButton2");
-
-        jButton3.setText("jButton3");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -51,29 +51,64 @@ public class MqttStarter extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/mqtt.png"))); // NOI18N
 
-        jButton4.setText("jButton4");
+        connect_jtb.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        connect_jtb.setText("connect...");
+        connect_jtb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                connect_jtbActionPerformed(evt);
+            }
+        });
 
-        jToggleButton2.setText("jToggleButton2");
+        jPanel1.setLayout(new java.awt.GridLayout(2, 2));
+
+        startTracer_jb.setText("MQTTracer");
+        startTracer_jb.setEnabled(false);
+        startTracer_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startTracer_jbActionPerformed(evt);
+            }
+        });
+        jPanel1.add(startTracer_jb);
+
+        startXml_jb.setText("XMLFrame");
+        startXml_jb.setEnabled(false);
+        startXml_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startXml_jbActionPerformed(evt);
+            }
+        });
+        jPanel1.add(startXml_jb);
+
+        startSequencer_jb.setText("MQTTSequencer");
+        startSequencer_jb.setEnabled(false);
+        startSequencer_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startSequencer_jbActionPerformed(evt);
+            }
+        });
+        jPanel1.add(startSequencer_jb);
+
+        jButton2.setText("unused...");
+        jButton2.setEnabled(false);
+        jPanel1.add(jButton2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addComponent(jScrollPane1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(connect_jtb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,33 +116,62 @@ public class MqttStarter extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(74, 74, 74)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton4))
+                        .addComponent(connect_jtb, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+                .addComponent(jScrollPane1))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void connect_jtbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_jtbActionPerformed
+        if(connect_jtb.isSelected())
+        {
+            if(!client.isConnected())
+            {
+                client.setAddress("tcp://192.168.178.45:1883");
+                client.setIdentifier("macBook_pro");
+                client.connectClient();
+                
+                EnableProgramStarts(true);
+            }
+        }
+        else
+        {
+            if(client.isConnected())
+            {
+                // disconnect sequence
+                EnableProgramStarts(false);
+                client.disconnect();
+            }
+        }
+    }//GEN-LAST:event_connect_jtbActionPerformed
+
+    private void startTracer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startTracer_jbActionPerformed
+        TracerFrame tracer = new TracerFrame(client);
+        tracer.Start(tracer);
+    }//GEN-LAST:event_startTracer_jbActionPerformed
+
+    private void startXml_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startXml_jbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startXml_jbActionPerformed
+
+    private void startSequencer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSequencer_jbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_startSequencer_jbActionPerformed
+
+
+    public void Start()
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -122,25 +186,33 @@ public class MqttStarter extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MqttStarter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MqttStarter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MqttStarter().setVisible(true);
+                MqttStarter.this.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JToggleButton connect_jtb;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JButton startSequencer_jb;
+    private javax.swing.JButton startTracer_jb;
+    private javax.swing.JButton startXml_jb;
     // End of variables declaration//GEN-END:variables
+
+    private void EnableProgramStarts(boolean enable) {
+        this.startTracer_jb.setEnabled(enable);
+        this.startXml_jb.setEnabled(enable);
+        this.startSequencer_jb.setEnabled(enable);
+        
+    }
 }
