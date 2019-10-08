@@ -6,6 +6,7 @@
 package launch;
 
 import gui.TracerFrame;
+import myMqtt.MyMqttClient;
 
 /**
  *
@@ -19,7 +20,12 @@ public class Launcher
      */
     public static void main(String[] args) 
     {
-        TracerFrame tracer = new TracerFrame();
+        MyMqttClient client = MyMqttClient.getInstance();
+                client.setAddress("tcp://192.168.178.45:1883");
+                client.setIdentifier("macBook_pro");
+                client.connectClient();
+                
+        TracerFrame tracer = new TracerFrame(client);
         tracer.setTitle("MQTTracer");
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -44,14 +50,6 @@ public class Launcher
         }
         //</editor-fold>
 
-        
-        /*MyMqttClient client = MyMqttClient.getInstance();
-                client.setAddress("tcp://192.168.178.45:1883");
-                client.setIdentifier("macBook_pro");
-                client.connectClient();
-                
-        client.setSubscriber(tracer.getMqttSubscriberTrace("dev21/temp_hum/#"));*/
-        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

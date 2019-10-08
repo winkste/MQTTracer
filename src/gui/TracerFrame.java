@@ -35,13 +35,21 @@ public class TracerFrame extends javax.swing.JFrame {
     PrintWriter printer = null;
     private FilterDialog filterDialog;
     private XMLFrame xmlFrame;
+    private MqttSubscriber errSubs;
+    private MqttSubscriber stdSubs;
+    private MqttSubscriber infSubs;
 
     /**
      * Creates new form TracerFrame
      */
     public TracerFrame() 
     {
-        client = MyMqttClient.getInstance();
+ //       client = MyMqttClient.getInstance();
+        
+        errSubs = TracerFrame.this.getMqttErrSubscriberTrace("err/#");
+        stdSubs = TracerFrame.this.getMqttStdSubscriberTrace("std/#");
+        infSubs = TracerFrame.this.getMqttInfoSubscriberTrace("inf/#");
+        
         initComponents();
         scroller_jsp.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
             if(autoscroll_jcb.isSelected())
@@ -56,6 +64,12 @@ public class TracerFrame extends javax.swing.JFrame {
                     }
                 });
                 filterDialog.setVisible(false);
+    }
+    
+    public TracerFrame(MyMqttClient client) 
+    {
+        this();
+        this.client = client;
     }
 
     /**
@@ -229,13 +243,13 @@ public class TracerFrame extends javax.swing.JFrame {
     private void connect_jtbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_jtbActionPerformed
         if(connect_jtb.isSelected())
         {
-            if(!client.isConnected())
+            //if(!client.isConnected())
                 connectClient(); 
         }
         else
         {
-            if(client.isConnected())
-                client.disconnect();
+            //if(client.isConnected())
+                disconnect();
         }
     }//GEN-LAST:event_connect_jtbActionPerformed
 
@@ -445,21 +459,24 @@ public class TracerFrame extends javax.swing.JFrame {
     {
         connect_jtb.setSelected(false);
         JOptionPane.showMessageDialog(this,
-            "Eggs are not supposed to be green.",
-            "Inane warning",
+            "Error in MQTT connection, please restart!",
+            "MQTT warning",
             JOptionPane.WARNING_MESSAGE);
-        this.runXmlFrame_jb.setEnabled(false);
     }
     
     private void connectClient()
     {
-        client.setAddress("tcp://192.168.178.45:1883");
-        client.setIdentifier("imac");
-        client.connectClient();
+ /*       client.setAddress("tcp://192.168.178.45:1883");
+        client.setIdentifier("macbook pro");
+        client.connectClient();*/
 
-        client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/#"));
+        /*client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/#"));
         client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/#"));
-        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));
+        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));*/
+        
+        client.setSubscriber(errSubs);
+        client.setSubscriber(infSubs);
+        client.setSubscriber(stdSubs);
     }
     
     public MqttSubscriber getMqttStdSubscriberTrace(String filter) 
@@ -498,5 +515,13 @@ public class TracerFrame extends javax.swing.JFrame {
             printer.println(entryString);
             printer.flush();
         }
+    }
+
+    private void disconnect() {
+        
+        client.removeSubscriber(errSubs);
+        client.removeSubscriber(infSubs);
+        client.removeSubscriber(stdSubs);
+  //      client.disconnect();
     }
 }
