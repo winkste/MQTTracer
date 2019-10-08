@@ -34,7 +34,6 @@ public class TracerFrame extends javax.swing.JFrame {
     MyMqttClient client;
     PrintWriter printer = null;
     private FilterDialog filterDialog;
-    private XMLFrame xmlFrame;
     private MqttSubscriber errSubs;
     private MqttSubscriber stdSubs;
     private MqttSubscriber infSubs;
@@ -49,7 +48,7 @@ public class TracerFrame extends javax.swing.JFrame {
         errSubs = TracerFrame.this.getMqttErrSubscriberTrace("err/#");
         stdSubs = TracerFrame.this.getMqttStdSubscriberTrace("std/#");
         infSubs = TracerFrame.this.getMqttInfoSubscriberTrace("inf/#");
-        
+                
         initComponents();
         scroller_jsp.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
             if(autoscroll_jcb.isSelected())
@@ -90,15 +89,12 @@ public class TracerFrame extends javax.swing.JFrame {
         connect_jtb = new javax.swing.JToggleButton();
         autoscroll_jcb = new javax.swing.JCheckBox();
         clear_jb = new javax.swing.JButton();
-        runXmlFrame_jb = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         publish_jb = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         topic_jtf = new javax.swing.JTextField();
         payload_jtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         textDisplay_jtp.setBackground(new java.awt.Color(102, 102, 102));
         scroller_jsp.setViewportView(textDisplay_jtp);
@@ -143,13 +139,6 @@ public class TracerFrame extends javax.swing.JFrame {
             }
         });
 
-        runXmlFrame_jb.setText("XmlFrame");
-        runXmlFrame_jb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runXmlFrame_jbActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,8 +153,7 @@ public class TracerFrame extends javax.swing.JFrame {
                     .addComponent(clear_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(autoscroll_jcb)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(runXmlFrame_jb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -179,9 +167,7 @@ public class TracerFrame extends javax.swing.JFrame {
                 .addComponent(select_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(log_jtb)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(runXmlFrame_jb)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                 .addComponent(clear_jb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(autoscroll_jcb)
@@ -243,13 +229,12 @@ public class TracerFrame extends javax.swing.JFrame {
     private void connect_jtbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connect_jtbActionPerformed
         if(connect_jtb.isSelected())
         {
-            //if(!client.isConnected())
-                connectClient(); 
+
+            connectClient(); 
         }
         else
         {
-            //if(client.isConnected())
-                disconnect();
+            disconnect();
         }
     }//GEN-LAST:event_connect_jtbActionPerformed
 
@@ -307,42 +292,14 @@ public class TracerFrame extends javax.swing.JFrame {
         textDisplay_jtp.setText("");
     }//GEN-LAST:event_clear_jbActionPerformed
 
-    private void runXmlFrame_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runXmlFrame_jbActionPerformed
-        this.xmlFrame = new XMLFrame();
-        
-        this.xmlFrame.Start();
-    }//GEN-LAST:event_runXmlFrame_jbActionPerformed
 
-
-    public void Start(TracerFrame tracer) 
+    public void Start() 
     {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TracerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TracerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TracerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TracerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                tracer.setVisible(true);
+                TracerFrame.this.setVisible(true);
             }
         });
     }
@@ -359,7 +316,6 @@ public class TracerFrame extends javax.swing.JFrame {
     public javax.swing.JToggleButton log_jtb;
     private javax.swing.JTextField payload_jtf;
     private javax.swing.JButton publish_jb;
-    private javax.swing.JButton runXmlFrame_jb;
     public javax.swing.JScrollPane scroller_jsp;
     public javax.swing.JButton select_jb;
     public javax.swing.JTextPane textDisplay_jtp;
@@ -437,13 +393,13 @@ public class TracerFrame extends javax.swing.JFrame {
             @Override
             public void notify(String filter, String msg) 
             {
-                SetMessage(filter, msg, Color.green);             
+                SetMessage(filter, msg, Color.GRAY);             
             }
 
             @Override
             public void notify(String msg) 
             {
-                SetMessage("unknown filter", msg, Color.green);
+                SetMessage("unknown filter", msg, Color.GRAY);
             }
 
             @Override
@@ -464,15 +420,7 @@ public class TracerFrame extends javax.swing.JFrame {
     }
     
     private void connectClient()
-    {
- /*       client.setAddress("tcp://192.168.178.45:1883");
-        client.setIdentifier("macbook pro");
-        client.connectClient();*/
-
-        /*client.setSubscriber(TracerFrame.this.getMqttErrSubscriberTrace("err/#"));
-        client.setSubscriber(TracerFrame.this.getMqttInfoSubscriberTrace("inf/#"));
-        client.setSubscriber(TracerFrame.this.getMqttStdSubscriberTrace("std/#"));*/
-        
+    {        
         client.setSubscriber(errSubs);
         client.setSubscriber(infSubs);
         client.setSubscriber(stdSubs);
@@ -490,13 +438,13 @@ public class TracerFrame extends javax.swing.JFrame {
             @Override
             public void notify(String filter, String msg) 
             {
-                SetMessage(filter, msg, Color.white);             
+                SetMessage(filter, msg, Color.black);             
             }
 
             @Override
             public void notify(String msg) 
             {
-                SetMessage("unknown filter", msg, Color.white);
+                SetMessage("unknown filter", msg, Color.black);
             }
 
             @Override
@@ -516,11 +464,11 @@ public class TracerFrame extends javax.swing.JFrame {
         }
     }
 
-    private void disconnect() {
+    private void disconnect() 
+    {
         
         client.removeSubscriber(errSubs);
         client.removeSubscriber(infSubs);
         client.removeSubscriber(stdSubs);
-  //      client.disconnect();
     }
 }
