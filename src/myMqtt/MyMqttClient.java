@@ -102,6 +102,8 @@ public class MyMqttClient implements MqttCallback
     {
         try {
             client.disconnect();
+            for(int i = 0; i<subsList.size(); i++)
+                removeSubscriber(subsList.remove(i));
             client = null;
             subsList = new ArrayList<MqttSubscriber>();
             } catch (MqttException ex) {
