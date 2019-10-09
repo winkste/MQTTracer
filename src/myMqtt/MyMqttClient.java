@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -74,7 +75,8 @@ public class MyMqttClient implements MqttCallback
                 MqttConnectOptions opts = new MqttConnectOptions();
                 opts.setCleanSession(true);
                 //client.connect(opts);
-                client.connectWithResult(opts);
+                IMqttToken token = client.connectWithResult(opts);
+                token.waitForCompletion();
             } catch (MqttException ex) {
                 Logger.getLogger(MyMqttClient.class.getName()).log(Level.SEVERE, null, ex);
             }

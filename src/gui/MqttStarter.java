@@ -43,6 +43,11 @@ public class MqttStarter extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTextArea1.setBackground(new java.awt.Color(102, 102, 102));
         jTextArea1.setColumns(20);
@@ -164,6 +169,11 @@ public class MqttStarter extends javax.swing.JFrame {
     private void startSequencer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSequencer_jbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_startSequencer_jbActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(client.isConnected())
+            client.disconnect();
+    }//GEN-LAST:event_formWindowClosing
 
 
     public void Start()
