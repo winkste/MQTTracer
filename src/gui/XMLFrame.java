@@ -7,6 +7,7 @@ package gui;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
+import myMqtt.MyMqttClient;
 
 /**
  *
@@ -14,13 +15,24 @@ import javax.swing.table.AbstractTableModel;
  */
 public class XMLFrame extends javax.swing.JFrame 
 {
+    private XmlFrameControl logic;
+    private MyMqttClient client;
 
     /**
      * Creates new form XMLFrame
      */
     public XMLFrame() {
         initComponents();
-        devices_jli.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        logic = new XmlFrameControl(this);
+        devices_jli.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);     
+    }
+    
+    public XMLFrame(MyMqttClient client)
+    {
+        this();
+        this.client = client;
+        logic.setClient(client);
+        
     }
 
     /**
@@ -256,9 +268,6 @@ public class XMLFrame extends javax.swing.JFrame
             new XMLFrame().setVisible(true);
         });
     }
-    
-    // my own variables
-    private XmlFrameControl logic = new XmlFrameControl(this);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> devices_jli;
@@ -285,11 +294,6 @@ public class XMLFrame extends javax.swing.JFrame
         this.xmlFile_jtf.setText(xmlFile);
     }
 
-    void ActivateElements() 
-    {
-     
-    }
-
     void SetDeviceList(String[] list) 
     {
         this.devices_jli.setListData(list);   
@@ -300,7 +304,7 @@ public class XMLFrame extends javax.swing.JFrame
     {
         this.subscriptions_jt.setModel(model);
         this.subscriptions_jt.getColumnModel().getColumn(0).setHeaderValue("Topic");
-        this.subscriptions_jt.getColumnModel().getColumn(1).setHeaderValue("Data");    
+        this.subscriptions_jt.getColumnModel().getColumn(1).setHeaderValue("Data");   
     }
 
     void SetPublications(String [] publications) 

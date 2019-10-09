@@ -8,8 +8,11 @@ package gui;
 import data.MyXml;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
+import myMqtt.MqttSubscriber;
+import myMqtt.MyMqttClient;
 
 /**
  *
@@ -23,7 +26,10 @@ public class XmlFrameControl
     private int selectedDevice;
     private boolean connected;
     private boolean fileLoaded;
-
+    private MyMqttClient client;
+    private List <MqttSubscriber> subsList;
+    
+    
     XmlFrameControl(XMLFrame frame) 
     {
         xmlFile = null;
@@ -32,6 +38,7 @@ public class XmlFrameControl
         selectedDevice = 999;
         connected = false;
         fileLoaded = false;
+        subsList = new ArrayList<>();
     }
 
     void StartFileSelection(ActionEvent evt) 
@@ -70,6 +77,10 @@ public class XmlFrameControl
             this.frame.SetPublications(myXml.GetSubscriptionsForDevice(this.selectedDevice));
             // at this point the publication from the device is subscribed by the dialog
             this.frame.SetSubscriptions((myXml.GetPublicationsForDevice(this.selectedDevice)));
+            
+            //String [] subsArr = myXml.GetPublicationsForDeviceComplete(selectedDevice);
+            
+            
         }
     }
 
@@ -99,5 +110,10 @@ public class XmlFrameControl
             this.frame.setEnabledOfflineElements(false);
             this.frame.setEnabledOnlineElements(false);
         }
+    }
+
+    void setClient(MyMqttClient client) 
+    {
+        this.client = client;
     }
 }

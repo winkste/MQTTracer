@@ -71,6 +71,40 @@ public class MyXml
         return(list);
     }
     
+    public String [] GetPublicationsForDeviceComplete(int device)
+    {
+        List <String>list = new ArrayList<>();
+        String [] vectTopics;
+        
+        int capaIdx = 0;
+        while(null != devices.get(device).GetCapIdAtIdx(capaIdx))
+        {
+            String capability = devices.get(device).GetCapIdAtIdx(capaIdx);
+            
+            for(int idx = 0; idx < capas.size(); idx++)
+            {
+                if(0 == capability.compareTo(capas.get(idx).GetId()))
+                {
+                    int jdx = 0;
+                    while(null != capas.get(idx).GetPublications(jdx))
+                    {
+                        list.add(capas.get(idx).GetPublications(jdx));
+                        jdx++;
+                    }
+                }
+            }  
+            capaIdx++;
+        }
+        
+        vectTopics = new String[list.size()];
+        for(int idx = 0; idx < list.size(); idx++)
+        {
+            vectTopics[idx] = devices.get(device).GetId() + "/s/" + list.get(idx);
+        }
+                 
+        return(vectTopics);       
+    }
+    
     public AbstractTableModel GetPublicationsForDevice(int device)
     {
         List <String>list = new ArrayList<>();

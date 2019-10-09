@@ -5,6 +5,7 @@
  */
 package gui;
 
+import javax.swing.SwingWorker;
 import myMqtt.MyMqttClient;
 
 /**
@@ -14,13 +15,16 @@ import myMqtt.MyMqttClient;
 public class MqttStarter extends javax.swing.JFrame {
     
     private MyMqttClient client;
+    private int heartBeat;
 
     /**
      * Creates new form MqttStarter
      */
     public MqttStarter() {
-        client = MyMqttClient.getInstance();
+        this.client = MyMqttClient.getInstance();
         initComponents();
+        new MqttStarter.DataCollector().execute();
+        this.heartBeat = 0;
     }
 
     /**
@@ -33,7 +37,7 @@ public class MqttStarter extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        log_jta = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         connect_jtb = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
@@ -49,11 +53,11 @@ public class MqttStarter extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setBackground(new java.awt.Color(102, 102, 102));
-        jTextArea1.setColumns(20);
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        log_jta.setBackground(new java.awt.Color(102, 102, 102));
+        log_jta.setColumns(20);
+        log_jta.setForeground(new java.awt.Color(255, 255, 255));
+        log_jta.setRows(5);
+        jScrollPane1.setViewportView(log_jta);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/mqtt_icon_128px.png"))); // NOI18N
@@ -141,8 +145,8 @@ public class MqttStarter extends javax.swing.JFrame {
                 client.setAddress("tcp://192.168.178.45:1883");
                 client.setIdentifier("macBook_pro");
                 client.connectClient();
-                
                 EnableProgramStarts(true);
+                this.log_jta.append("connected to mqtt broker...\n");
             }
         }
         else
@@ -152,6 +156,7 @@ public class MqttStarter extends javax.swing.JFrame {
                 // disconnect sequence
                 EnableProgramStarts(false);
                 client.disconnect();
+                this.log_jta.append("disconnected from mqtt broker...\n");
             }
         }
     }//GEN-LAST:event_connect_jtbActionPerformed
@@ -159,15 +164,17 @@ public class MqttStarter extends javax.swing.JFrame {
     private void startTracer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startTracer_jbActionPerformed
         TracerFrame tracer = new TracerFrame(client);
         tracer.Start();
+        this.log_jta.append("trace dialog started...\n");
     }//GEN-LAST:event_startTracer_jbActionPerformed
 
     private void startXml_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startXml_jbActionPerformed
-        XMLFrame xml = new XMLFrame();
+        XMLFrame xml = new XMLFrame(client);
         xml.Start();
+        this.log_jta.append("xml dialog started...\n");
     }//GEN-LAST:event_startXml_jbActionPerformed
 
     private void startSequencer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSequencer_jbActionPerformed
-        // TODO add your handling code here:
+        this.log_jta.append("sequencer dialog started...\n");
     }//GEN-LAST:event_startSequencer_jbActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -192,7 +199,7 @@ public class MqttStarter extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea log_jta;
     private javax.swing.JButton startSequencer_jb;
     private javax.swing.JButton startTracer_jb;
     private javax.swing.JButton startXml_jb;
@@ -203,5 +210,31 @@ public class MqttStarter extends javax.swing.JFrame {
         this.startXml_jb.setEnabled(enable);
         this.startSequencer_jb.setEnabled(enable);
         
+    }
+    
+    class DataCollector extends SwingWorker<Long, Object>
+    {
+
+        @Override
+        protected Long doInBackground() throws Exception 
+        {
+            try 
+            { 
+                Thread.sleep(30000);
+            } catch ( InterruptedException e ) { }
+            new DataCollector().execute();
+            return (0L);
+        }
+        
+        @Override protected void done()
+        {
+            MqttStarter.this.heartBeat++;
+            String topic = "std/dev90/s/gen/heart";
+            if(true == MqttStarter.this.client.isConnected())
+            {
+                MqttStarter.this.client.publish(topic, Integer.toString(MqttStarter.this.heartBeat));
+                MqttStarter.this.log_jta.append("published : " + topic + " " + MqttStarter.this.heartBeat + "\n");
+            }
+        }
     }
 }
