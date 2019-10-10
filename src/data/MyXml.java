@@ -363,17 +363,22 @@ public class MyXml
                 String name = eElement.getElementsByTagName("name").item(0).getTextContent();
                 
                 NodeList nodeRxTopics = eElement.getElementsByTagName("topic_rx");
+                List <Topic> subs = new ArrayList<>();
                 String [] rxTopics = new String[nodeRxTopics.getLength()];
+
                 for(int idx = 0; idx < nodeRxTopics.getLength(); idx++)
                 {
                     rxTopics[idx] = nodeRxTopics.item(idx).getTextContent();
+                    subs.add(GetTopicById(nodeRxTopics.item(idx).getTextContent()));
                 }
                 
                 NodeList nodeTxTopics = eElement.getElementsByTagName("topic_tx");
+                List <Topic> pubs = new ArrayList<>();
                 String [] txTopics = new String[nodeTxTopics.getLength()];
                 for(int idx = 0; idx < nodeTxTopics.getLength(); idx++)
                 {
                     txTopics[idx] = nodeTxTopics.item(idx).getTextContent();
+                    pubs.add(GetTopicById(nodeTxTopics.item(idx).getTextContent()));
                 }
                 
                 NodeList nodeExt = eElement.getElementsByTagName("ext");
@@ -390,7 +395,7 @@ public class MyXml
                     capRef[idx] = nodeCapRef.item(idx).getTextContent();
                 }
                 
-                capas.add((new Capability(id, name, rxTopics, txTopics, capRef, extensions)));
+                capas.add((new Capability(id, name, subs, pubs, rxTopics, txTopics, capRef, extensions)));
            }
         }
         
@@ -428,6 +433,25 @@ public class MyXml
 
            }
         }
+    }
+
+    private Topic GetTopicById(String id) 
+    {
+        Topic retTopic = new Topic("na", "na");
+        
+        if(null != topics)
+        {
+            for(int idx = 0; idx < topics.size(); idx++)
+            {
+                if(topics.get(idx).GetId().startsWith(id))
+                {
+                    retTopic = topics.get(idx);
+                    break;
+                }
+            }
+        }
+
+        return(retTopic);
     }
     
     class myTableModel extends AbstractTableModel

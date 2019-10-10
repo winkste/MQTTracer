@@ -5,6 +5,8 @@
  */
 package data;
 
+import java.util.List;
+
 /**
  *
  * @author stephan_wink
@@ -17,6 +19,8 @@ public class Capability
     private String [] extensions;
     private String [] subscriptions;
     private String [] publications;
+    private List <Topic> subs;
+    private List <Topic> pubs;
     
     
     public Capability(String id, String name, String [] rxTopics, String [] txTopics, String [] refCapIds, String [] extensions)
@@ -27,6 +31,18 @@ public class Capability
         this.publications = txTopics.clone();
         this.refCapIds = refCapIds.clone();
         this.extensions = extensions.clone();
+    }
+
+    Capability(String id, String name, List<Topic> subs, List<Topic> pubs, String[] rxTopics, String[] txTopics, String[] capRef, String[] extensions) 
+    {
+        this.id = id;
+        this.name = name;
+        this.subscriptions = rxTopics.clone();
+        this.publications = txTopics.clone();
+        this.refCapIds = capRef.clone();
+        this.extensions = extensions.clone();
+        this.subs = subs;
+        this.pubs = pubs;
     }
     
     public String GetId()
