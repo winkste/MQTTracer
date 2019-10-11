@@ -55,4 +55,9 @@ public class Topic
             return(null);
         }
     }
+
+    public boolean equalsId(String id) 
+    {
+        return(this.id_str.matches(id));
+    }
 }

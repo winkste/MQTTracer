@@ -73,7 +73,7 @@ public class MyXml
     
     public String [] GetPublicationsForDeviceComplete(int device)
     {
-        List <String>list = new ArrayList<>();
+        List <Topic>list = new ArrayList<>();
         String [] vectTopics;
         
         int capaIdx = 0;
@@ -88,7 +88,7 @@ public class MyXml
                     int jdx = 0;
                     while(null != capas.get(idx).GetPublications(jdx))
                     {
-                        list.add(capas.get(idx).GetPublications(jdx));
+                        list.add(capas.get(idx).GetPublicationByIndex(jdx));
                         jdx++;
                     }
                 }
@@ -99,7 +99,9 @@ public class MyXml
         vectTopics = new String[list.size()];
         for(int idx = 0; idx < list.size(); idx++)
         {
-            vectTopics[idx] = devices.get(device).GetId() + "/s/" + list.get(idx);
+            vectTopics[idx] = list.get(idx).GetChan() + "/" 
+                                + devices.get(device).GetId() + "/s/" 
+                                + list.get(idx).GetId();
         }
                  
         return(vectTopics);       
@@ -364,20 +366,16 @@ public class MyXml
                 
                 NodeList nodeRxTopics = eElement.getElementsByTagName("topic_rx");
                 List <Topic> subs = new ArrayList<>();
-                String [] rxTopics = new String[nodeRxTopics.getLength()];
 
                 for(int idx = 0; idx < nodeRxTopics.getLength(); idx++)
                 {
-                    rxTopics[idx] = nodeRxTopics.item(idx).getTextContent();
                     subs.add(GetTopicById(nodeRxTopics.item(idx).getTextContent()));
                 }
                 
                 NodeList nodeTxTopics = eElement.getElementsByTagName("topic_tx");
                 List <Topic> pubs = new ArrayList<>();
-                String [] txTopics = new String[nodeTxTopics.getLength()];
                 for(int idx = 0; idx < nodeTxTopics.getLength(); idx++)
                 {
-                    txTopics[idx] = nodeTxTopics.item(idx).getTextContent();
                     pubs.add(GetTopicById(nodeTxTopics.item(idx).getTextContent()));
                 }
                 
@@ -395,7 +393,7 @@ public class MyXml
                     capRef[idx] = nodeCapRef.item(idx).getTextContent();
                 }
                 
-                capas.add((new Capability(id, name, subs, pubs, rxTopics, txTopics, capRef, extensions)));
+                capas.add((new Capability(id, name, subs, pubs, capRef, extensions)));
            }
         }
         
@@ -450,6 +448,9 @@ public class MyXml
                 }
             }
         }
+        
+        if(retTopic.GetId().startsWith("na"))
+            System.out.println("not valid entry for id:" + id);
 
         return(retTopic);
     }

@@ -78,9 +78,9 @@ public class XmlFrameControl
             // at this point the publication from the device is subscribed by the dialog
             this.frame.SetSubscriptions((myXml.GetPublicationsForDevice(this.selectedDevice)));
             
-            //String [] subsArr = myXml.GetPublicationsForDeviceComplete(selectedDevice);
-            
-            
+            String [] subsArr = myXml.GetPublicationsForDeviceComplete(selectedDevice);
+            UnsubscribeAll();
+            Subscribe(subsArr);            
         }
     }
 
@@ -115,5 +115,15 @@ public class XmlFrameControl
     void setClient(MyMqttClient client) 
     {
         this.client = client;
+    }
+
+    private void UnsubscribeAll() 
+    {
+        
+    }
+
+    private void Subscribe(String[] subsArr) 
+    {
+        
     }
 }

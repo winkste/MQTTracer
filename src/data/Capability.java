@@ -17,28 +17,17 @@ public class Capability
     private String name;
     private String [] refCapIds; 
     private String [] extensions;
-    private String [] subscriptions;
-    private String [] publications;
+    //private String [] subscriptions;
+    //private String [] publications;
     private List <Topic> subs;
     private List <Topic> pubs;
     
-    
-    public Capability(String id, String name, String [] rxTopics, String [] txTopics, String [] refCapIds, String [] extensions)
-    {
-        this.id = id;
-        this.name = name;
-        this.subscriptions = rxTopics.clone();
-        this.publications = txTopics.clone();
-        this.refCapIds = refCapIds.clone();
-        this.extensions = extensions.clone();
-    }
+   
 
-    Capability(String id, String name, List<Topic> subs, List<Topic> pubs, String[] rxTopics, String[] txTopics, String[] capRef, String[] extensions) 
+    Capability(String id, String name, List<Topic> subs, List<Topic> pubs, String[] capRef, String[] extensions) 
     {
         this.id = id;
         this.name = name;
-        this.subscriptions = rxTopics.clone();
-        this.publications = txTopics.clone();
         this.refCapIds = capRef.clone();
         this.extensions = extensions.clone();
         this.subs = subs;
@@ -57,25 +46,70 @@ public class Capability
     
     public String GetPublications(int idx)
     {
-        if(idx < publications.length)
+        if(null != pubs)
         {
-            return(publications[idx]);
+            if(idx < pubs.size())
+            {
+                return(pubs.get(idx).GetId());
+            }
         }
-        else
+        return(null);
+    }
+    
+    public Topic GetPublicationByIndex(int idx)
+    {
+        if(null != pubs)
         {
-            return(null);
+            if(idx < pubs.size())
+            {
+                return(pubs.get(idx));
+            }
         }
+        return(null);
+    }
+    
+    public Topic GetPublicationById(String id)
+    {
+        if(null != this.pubs)
+        {
+            for(int idx = 0; idx < this.pubs.size(); idx++)
+            {
+                if(this.pubs.get(idx).equalsId(id))
+                {
+                    return(this.pubs.get(idx));
+                }
+            }
+        }
+        
+        return(null);
+    }
+    
+    public Topic GetSubscriptionById(String id)
+    {
+        if(null != this.subs)
+        {
+            for(int idx = 0; idx < this.subs.size(); idx++)
+            {
+                if(this.subs.get(idx).equalsId(id))
+                {
+                    return(this.subs.get(idx));
+                }
+            }
+        }
+        
+        return(null);
     }
     
     public String GetSubscriptions(int idx)
     {
-        if(idx < subscriptions.length)
+        if(null != subs)
         {
-            return(subscriptions[idx]);
+            if(idx < subs.size())
+            {
+                return(subs.get(idx).GetId());
+            }
         }
-        else
-        {
-            return(null);
-        }
+        
+        return(null);
     }
 }
