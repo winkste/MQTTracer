@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import myMqtt.MqttSubscriber;
 import myMqtt.MyMqttClient;
 
@@ -119,11 +120,82 @@ public class XmlFrameControl
 
     private void UnsubscribeAll() 
     {
-        
+        if(null != this.client)
+        {
+            while(!this.subsList.isEmpty())
+            {
+                this.client.removeSubscriber(this.subsList.remove(0));
+                
+            }
+        }
     }
 
     private void Subscribe(String[] subsArr) 
     {
-        
+        MqttSubscriber tempSubs;
+        if(null != this.client && null != subsArr)
+        {
+            for(int idx = 0; idx < subsArr.length; idx++)
+            {
+                tempSubs = getMqttSubscriber(subsArr[idx]);
+                this.subsList.add(tempSubs);
+                this.client.setSubscriber(tempSubs);
+            }
+        } 
+    }
+    
+    public MqttSubscriber getMqttSubscriber(String filter) 
+    {
+        return(new MqttSubscriber(){
+            @Override
+            public String getFilter() 
+            {
+                return(filter);
+            }
+
+            @Override
+            public void notify(String filter, String msg) 
+            {
+                //System.out.println("message received: " + filter + "--" + msg);
+                for(int idx = 0; idx < XmlFrameControl.this.subsList.size(); idx++)
+                {
+                    String var = XmlFrameControl.this.subsList.get(idx).getFilter();
+                    if(var.contentEquals(filter))
+                    {
+                        //System.out.println("old:" + XmlFrameControl.this.frame.GetTableModel().getValueAt(idx, 1));
+                        XmlFrameControl.this.frame.GetTableModel().setValueAt(msg, idx, 1);
+                        //XmlFrameControl.this.frame.GetTableModel().fireTableDataChanged();
+                                
+                        //System.out.println("new:" + XmlFrameControl.this.frame.GetTableModel().getValueAt(idx, 1));
+                    }
+                }
+                
+            }
+
+            @Override
+            public void notify(String msg) 
+            {
+                System.out.println("message received: " + filter + "--" + msg);
+            }
+
+            @Override
+            public void disconnected() 
+            {
+                handleDisconnection();
+            }
+        });
+    }
+    
+    private void handleDisconnection()
+    {
+        /*JOptionPane.showMessageDialog(this,
+            "Error in MQTT connection, please restart!",
+            "MQTT warning",
+            JOptionPane.WARNING_MESSAGE);*/
+    }
+
+    void ReactOnClosing() 
+    {
+        UnsubscribeAll();
     }
 }

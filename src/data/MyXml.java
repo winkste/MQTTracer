@@ -507,6 +507,7 @@ public class MyXml
                 if(row < this.values.length)
                 {
                     this.values[row] = (String)value;
+                    this.fireTableDataChanged();
                 }
             }
        

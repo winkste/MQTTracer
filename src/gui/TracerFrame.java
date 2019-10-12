@@ -96,6 +96,12 @@ public class TracerFrame extends javax.swing.JFrame {
         payload_jtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
 
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
         textDisplay_jtp.setBackground(new java.awt.Color(102, 102, 102));
         scroller_jsp.setViewportView(textDisplay_jtp);
 
@@ -291,6 +297,13 @@ public class TracerFrame extends javax.swing.JFrame {
     private void clear_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_jbActionPerformed
         textDisplay_jtp.setText("");
     }//GEN-LAST:event_clear_jbActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(null != this.client)
+        {
+            disconnect();
+        }
+    }//GEN-LAST:event_formWindowClosing
 
 
     public void Start() 

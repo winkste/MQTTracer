@@ -7,6 +7,7 @@ package gui;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import myMqtt.MyMqttClient;
 
 /**
@@ -60,6 +61,12 @@ public class XMLFrame extends javax.swing.JFrame
         jLabel3 = new javax.swing.JLabel();
         xmlFile_jtf = new javax.swing.JTextField();
         loadButton_jtf = new javax.swing.JButton();
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("topic:");
 
@@ -238,6 +245,10 @@ public class XMLFrame extends javax.swing.JFrame
         }
     }//GEN-LAST:event_publications_jcbActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        logic.ReactOnClosing();
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
@@ -304,7 +315,7 @@ public class XMLFrame extends javax.swing.JFrame
     {
         this.subscriptions_jt.setModel(model);
         this.subscriptions_jt.getColumnModel().getColumn(0).setHeaderValue("Topic");
-        this.subscriptions_jt.getColumnModel().getColumn(1).setHeaderValue("Data");   
+        this.subscriptions_jt.getColumnModel().getColumn(1).setHeaderValue("Data");  
     }
 
     void SetPublications(String [] publications) 
@@ -339,5 +350,9 @@ public class XMLFrame extends javax.swing.JFrame
     void setEnabledOnlineElements(boolean b) 
     {
         this.publishButton_jb.setEnabled(b);
+    }
+
+    TableModel GetTableModel() {
+        return(this.subscriptions_jt.getModel());
     }
 }
