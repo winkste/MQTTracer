@@ -115,7 +115,8 @@ public class MyMqttClient implements MqttCallback
     {
         subsList.add(subs);
         try {
-            client.subscribe(subs.getFilter());
+             IMqttToken token = client.subscribeWithResponse(subs.getFilter());
+             //System.out.println(token.getGrantedQos() + " " + token.isComplete());
         } catch (MqttException ex) {
             Logger.getLogger(MyMqttClient.class.getName()).log(Level.SEVERE, null, ex);
         }
