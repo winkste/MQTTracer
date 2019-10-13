@@ -16,6 +16,7 @@ public class MqttStarter extends javax.swing.JFrame {
     
     private MyMqttClient client;
     private int heartBeat;
+    private String hostname = "default";
 
     /**
      * Creates new form MqttStarter
@@ -25,6 +26,12 @@ public class MqttStarter extends javax.swing.JFrame {
         initComponents();
         new MqttStarter.DataCollector().execute();
         this.heartBeat = 0;
+        hostname = "default";
+    }
+
+    public MqttStarter(String hostname) {
+        this();
+        this.hostname = hostname;
     }
 
     /**
@@ -143,10 +150,10 @@ public class MqttStarter extends javax.swing.JFrame {
             if(!client.isConnected())
             {
                 client.setAddress("tcp://192.168.178.45:1883");
-                client.setIdentifier("macBook_pro");
+                client.setIdentifier(this.hostname);
                 client.connectClient();
                 EnableProgramStarts(true);
-                this.log_jta.append("connected to mqtt broker...\n");
+                this.log_jta.append(this.hostname + " connected to mqtt broker ...\n");
             }
         }
         else

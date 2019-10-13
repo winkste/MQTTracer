@@ -7,6 +7,9 @@ package launch;
 
 import gui.MqttStarter;
 import gui.TracerFrame;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import myMqtt.MyMqttClient;
 
 /**
@@ -59,7 +62,18 @@ public class Launcher
             }
         });*/
         
-       MqttStarter start = new MqttStarter();
+        java.net.InetAddress localMachine;
+        String hostName = "unknown";
+        try {
+            localMachine = java.net.InetAddress.getLocalHost();
+            System.out.println("Hostname of local machine: " + localMachine.getHostName());
+            hostName = localMachine.getHostName();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+       MqttStarter start = new MqttStarter(hostName);
        start.Start();
     }
     
