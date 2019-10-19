@@ -454,6 +454,15 @@ public class MyXml
 
         return(retTopic);
     }
+
+    public String GetSubscriptionById(int deviceId, String subsId) 
+    {
+        String subs = "na";
+        
+        subs = "std/" + this.devices.get(deviceId).GetId() + "/r/" + subsId;
+        
+        return(subs);
+    }
     
     class myTableModel extends AbstractTableModel
     {

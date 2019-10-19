@@ -57,6 +57,7 @@ public class XmlFrameControl
             this.fileLoaded = myXml.Create();
             this.frame.SetDeviceList(myXml.GetDeviceList());
             this.selectedDevice = 999;
+            ReactOnDeviceSelectionChanged(0);
         }
         else
         {   
@@ -88,6 +89,8 @@ public class XmlFrameControl
     void ReactOnTxTopicSelctionChanged(String topic) 
     {
         List <String> payloads = this.myXml.GetPayload(topic);
+        
+        this.frame.SetPayloads(payloads);
         String payload = "";
         while(0 != payloads.size())
         {
@@ -101,7 +104,7 @@ public class XmlFrameControl
         if(true == fileLoaded)
         {
             this.frame.setEnabledOfflineElements(true);
-            if(true == connected)
+            if(null != client && client.isConnected())
             {
                 this.frame.setEnabledOnlineElements(true);
             }
@@ -197,5 +200,17 @@ public class XmlFrameControl
     void ReactOnClosing() 
     {
         UnsubscribeAll();
+    }
+
+    void ReactOnPublishRequest(String subsId, String payload) 
+    {
+        String filter;
+        
+        filter = this.myXml.GetSubscriptionById(this.selectedDevice, subsId);
+        
+        if(true == client.isConnected())
+        {
+            client.publish(filter, payload);
+        }
     }
 }

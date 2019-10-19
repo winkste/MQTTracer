@@ -5,6 +5,7 @@
  */
 package gui;
 
+import java.util.List;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -52,7 +53,7 @@ public class XMLFrame extends javax.swing.JFrame
         payload_jtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         publishButton_jb = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        payload_jcb = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         devices_jli = new javax.swing.JList<>();
@@ -86,8 +87,19 @@ public class XMLFrame extends javax.swing.JFrame
 
         publishButton_jb.setText("publish...");
         publishButton_jb.setEnabled(false);
+        publishButton_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                publishButton_jbActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        payload_jcb.setEditable(true);
+        payload_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        payload_jcb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payload_jcbActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -101,7 +113,7 @@ public class XMLFrame extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(payload_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(payload_jtf, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -117,7 +129,7 @@ public class XMLFrame extends javax.swing.JFrame
                     .addComponent(payload_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(publishButton_jb)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(payload_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -254,6 +266,23 @@ public class XMLFrame extends javax.swing.JFrame
         logic.ReactOnClosing();
     }//GEN-LAST:event_formWindowClosing
 
+    private void publishButton_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publishButton_jbActionPerformed
+        /*logic.ReactOnPublishRequest(this.publications_jcb.getSelectedItem().toString(), 
+                                        this.payload_jtf.getText());*/
+        System.out.println("IDx: " + this.payload_jcb.getSelectedIndex() + "Text:" + this.payload_jcb.getSelectedItem().toString());
+        //if(0 <= this.payload_jcb.getSelectedIndex())
+        //{
+            logic.ReactOnPublishRequest(this.publications_jcb.getSelectedItem().toString(), 
+                                        this.payload_jcb.getSelectedItem().toString());
+            System.out.println("Filter: " + this.publications_jcb.getSelectedItem().toString()
+                                    + "Payload: " + this.payload_jcb.getSelectedItem().toString());
+        //}
+    }//GEN-LAST:event_publishButton_jbActionPerformed
+
+    private void payload_jcbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payload_jcbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_payload_jcbActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -287,7 +316,6 @@ public class XMLFrame extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> devices_jli;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -298,6 +326,7 @@ public class XMLFrame extends javax.swing.JFrame
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton_jtf;
+    private javax.swing.JComboBox<String> payload_jcb;
     private javax.swing.JTextField payload_jtf;
     private javax.swing.JComboBox<String> publications_jcb;
     private javax.swing.JButton publishButton_jb;
@@ -361,7 +390,7 @@ public class XMLFrame extends javax.swing.JFrame
     {
         this.devices_jli.setEnabled(b);
         this.publications_jcb.setEnabled(b);
-        this.payload_jtf.setEnabled(b);   
+        this.payload_jtf.setEnabled(b);  
     }
 
     void setEnabledOnlineElements(boolean b) 
@@ -369,8 +398,24 @@ public class XMLFrame extends javax.swing.JFrame
         this.publishButton_jb.setEnabled(b);
     }
 
-    TableModel GetTableModel() {
+    TableModel GetTableModel() 
+    {
         return(this.subscriptions_jt.getModel());
+    }
+
+    void SetPayloads(List<String> payloads) 
+    {
+        this.payload_jcb.setSelectedIndex(0);
+        this.payload_jcb.removeAllItems();
+        if(null != payloads)
+        {
+            
+            for(int idx = 0; idx < payloads.size(); idx++)
+            {
+                this.payload_jcb.addItem(payloads.get(idx));
+            }
+        }
+        this.payload_jcb.addItem("manual input...");
     }
     
     

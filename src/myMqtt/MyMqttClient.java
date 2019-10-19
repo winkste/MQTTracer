@@ -16,6 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 
 /**
  *
@@ -27,12 +28,30 @@ public class MyMqttClient implements MqttCallback
     private List<MqttSubscriber> subsList = new ArrayList<>();
     private String address;
     private String identifier;
+    private String user;
+    private String pwd;
+
+    public void setUser(String user) 
+    {
+        this.user = user;
+    }
+
+    public void setPassword(String pwd) 
+    {
+        this.pwd = pwd;
+    }
     
     private static final class InstanceHolder {
         static final MyMqttClient INSTANCE = new MyMqttClient();
     }
     
-    private MyMqttClient(){}
+    private MyMqttClient()
+    {
+        this.address = "localhost";
+        this.identifier = "localPC";
+        this.user = "myUser";
+        this.pwd = "pwd";
+    }
     
     public static MyMqttClient getInstance () {
         return InstanceHolder.INSTANCE;
@@ -74,6 +93,8 @@ public class MyMqttClient implements MqttCallback
                 client.setCallback(this);
                 MqttConnectOptions opts = new MqttConnectOptions();
                 opts.setCleanSession(true);
+                opts.setUserName(this.user);
+                opts.setPassword(this.pwd.toCharArray());
                 //client.connect(opts);
                 IMqttToken token = client.connectWithResult(opts);
                 token.waitForCompletion();

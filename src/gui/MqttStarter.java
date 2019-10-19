@@ -5,6 +5,7 @@
  */
 package gui;
 
+import data.ToolSets;
 import javax.swing.SwingWorker;
 import myMqtt.MyMqttClient;
 
@@ -17,6 +18,7 @@ public class MqttStarter extends javax.swing.JFrame {
     private MyMqttClient client;
     private int heartBeat;
     private String hostname = "default";
+    private ToolSets settings;
 
     /**
      * Creates new form MqttStarter
@@ -27,6 +29,7 @@ public class MqttStarter extends javax.swing.JFrame {
         new MqttStarter.DataCollector().execute();
         this.heartBeat = 0;
         hostname = "default";
+        settings = new ToolSets();
     }
 
     public MqttStarter(String hostname) {
@@ -149,8 +152,10 @@ public class MqttStarter extends javax.swing.JFrame {
         {
             if(!client.isConnected())
             {
-                client.setAddress("tcp://192.168.178.45:1883");
+                client.setAddress(this.settings.GetAddress());
                 client.setIdentifier(this.hostname);
+                client.setUser(this.settings.GetUser());
+                client.setPassword(this.settings.GetPwd());
                 client.connectClient();
                 EnableProgramStarts(true);
                 this.log_jta.append(this.hostname + " connected to mqtt broker ...\n");
