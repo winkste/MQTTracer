@@ -56,13 +56,13 @@ public class TracerFrame extends javax.swing.JFrame {
         });
         
         filterDialog = new FilterDialog(new javax.swing.JFrame(), true);
-                filterDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        filterDialog.setVisible(false);
-                    }
-                });
+        filterDialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
                 filterDialog.setVisible(false);
+            }
+        });
+        filterDialog.setVisible(false);
     }
     
     public TracerFrame(MyMqttClient client) 

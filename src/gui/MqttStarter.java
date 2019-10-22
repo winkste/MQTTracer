@@ -186,6 +186,8 @@ public class MqttStarter extends javax.swing.JFrame {
     }//GEN-LAST:event_startXml_jbActionPerformed
 
     private void startSequencer_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSequencer_jbActionPerformed
+        SequencerFrame sequencer = new SequencerFrame(client);
+        sequencer.Start();
         this.log_jta.append("sequencer dialog started...\n");
     }//GEN-LAST:event_startSequencer_jbActionPerformed
 
