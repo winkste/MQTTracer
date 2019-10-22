@@ -91,12 +91,6 @@ public class XmlFrameControl
         List <String> payloads = this.myXml.GetPayload(topic);
         
         this.frame.SetPayloads(payloads);
-        String payload = "";
-        while(0 != payloads.size())
-        {
-            payload = payload.concat(", " + payloads.remove(0));
-        }
-        this.frame.SetPayload(payload);
     }
 
     void UpdateControlsStatus()

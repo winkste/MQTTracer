@@ -50,7 +50,6 @@ public class XMLFrame extends javax.swing.JFrame
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         publications_jcb = new javax.swing.JComboBox<>();
-        payload_jtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         publishButton_jb = new javax.swing.JButton();
         payload_jcb = new javax.swing.JComboBox<>();
@@ -79,9 +78,6 @@ public class XMLFrame extends javax.swing.JFrame
                 publications_jcbActionPerformed(evt);
             }
         });
-
-        payload_jtf.setText("jTextField1");
-        payload_jtf.setEnabled(false);
 
         jLabel2.setText("payload:");
 
@@ -113,9 +109,7 @@ public class XMLFrame extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(payload_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(payload_jtf, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                .addComponent(payload_jcb, 0, 334, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(publishButton_jb, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -126,7 +120,6 @@ public class XMLFrame extends javax.swing.JFrame
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(publications_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(payload_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(publishButton_jb)
                     .addComponent(payload_jcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -327,7 +320,6 @@ public class XMLFrame extends javax.swing.JFrame
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton loadButton_jtf;
     private javax.swing.JComboBox<String> payload_jcb;
-    private javax.swing.JTextField payload_jtf;
     private javax.swing.JComboBox<String> publications_jcb;
     private javax.swing.JButton publishButton_jb;
     private javax.swing.JTable subscriptions_jt;
@@ -358,7 +350,6 @@ public class XMLFrame extends javax.swing.JFrame
         if(null == publications || 0 == publications.length)
         {
             this.publications_jcb.setEnabled(false);
-            this.payload_jtf.setEnabled(false);
         }
         else
         {    
@@ -369,13 +360,7 @@ public class XMLFrame extends javax.swing.JFrame
                 this.publications_jcb.addItem(publication);
             }
             this.publications_jcb.setEnabled(true);
-            this.payload_jtf.setEnabled(true);
         }
-    }
-
-    void SetPayload(String payload) 
-    {
-        this.payload_jtf.setText(payload);
     }
 
     void Start() 
@@ -389,8 +374,7 @@ public class XMLFrame extends javax.swing.JFrame
     void setEnabledOfflineElements(boolean b) 
     {
         this.devices_jli.setEnabled(b);
-        this.publications_jcb.setEnabled(b);
-        this.payload_jtf.setEnabled(b);  
+        this.publications_jcb.setEnabled(b); 
     }
 
     void setEnabledOnlineElements(boolean b) 
