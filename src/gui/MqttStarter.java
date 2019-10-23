@@ -35,6 +35,7 @@ public class MqttStarter extends javax.swing.JFrame {
     public MqttStarter(String hostname) {
         this();
         this.hostname = hostname;
+        this.setTitle("MQTTools");
     }
 
     /**
