@@ -1,2 +1,2 @@
 # MQTTracer
-A JAVA MQTT client to trace communication
+A JAVA MQTT client to manage and trace your MQTT devices.
