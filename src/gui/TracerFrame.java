@@ -451,13 +451,13 @@ public class TracerFrame extends javax.swing.JFrame {
             @Override
             public void notify(String filter, String msg) 
             {
-                SetMessage(filter, msg, Color.black);             
+                SetMessage(filter, msg, Color.white);             
             }
 
             @Override
             public void notify(String msg) 
             {
-                SetMessage("unknown filter", msg, Color.black);
+                SetMessage("unknown filter", msg, Color.white);
             }
 
             @Override
