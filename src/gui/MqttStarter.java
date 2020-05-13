@@ -244,7 +244,7 @@ public class MqttStarter extends javax.swing.JFrame {
         @Override protected void done()
         {
             MqttStarter.this.heartBeat++;
-            String topic = "std/dev90/s/gen/heart";
+            String topic = "std/dev90/s/health/tic";
             if(true == MqttStarter.this.client.isConnected())
             {
                 MqttStarter.this.client.publish(topic, Integer.toString(MqttStarter.this.heartBeat));
