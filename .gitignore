@@ -29,3 +29,6 @@ build/classes/gui/XMLFrame.form
 build/classes/gui/TracerFrame.form
 src/data/ToolSets.java
 build/classes/gui/XMLFrame.form
+build/classes/gui/SequencerFrame.form
+build/classes/gui/wshield.png
+src/.DS_Store

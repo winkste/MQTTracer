@@ -262,13 +262,13 @@ public class XMLFrame extends javax.swing.JFrame
     private void publishButton_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publishButton_jbActionPerformed
         /*logic.ReactOnPublishRequest(this.publications_jcb.getSelectedItem().toString(), 
                                         this.payload_jtf.getText());*/
-        System.out.println("IDx: " + this.payload_jcb.getSelectedIndex() + "Text:" + this.payload_jcb.getSelectedItem().toString());
+        //System.out.println("IDx: " + this.payload_jcb.getSelectedIndex() + "Text:" + this.payload_jcb.getSelectedItem().toString());
         //if(0 <= this.payload_jcb.getSelectedIndex())
         //{
             logic.ReactOnPublishRequest(this.publications_jcb.getSelectedItem().toString(), 
                                         this.payload_jcb.getSelectedItem().toString());
-            System.out.println("Filter: " + this.publications_jcb.getSelectedItem().toString()
-                                    + "Payload: " + this.payload_jcb.getSelectedItem().toString());
+            //System.out.println("Filter: " + this.publications_jcb.getSelectedItem().toString()
+            //                        + "Payload: " + this.payload_jcb.getSelectedItem().toString());
         //}
     }//GEN-LAST:event_publishButton_jbActionPerformed
 
